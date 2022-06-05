@@ -1,9 +1,23 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Badge } from 'reactstrap';
-class ProductList extends React.Component {
+import { Badge, Button, Table } from 'reactstrap';
+import { bindActionCreators } from 'redux';
+import * as productActions from "../../redux/actions/productActions"
+import * as cartActions from "../../redux/actions/cartActions"
+import alertify from "alertifyjs"
+
+class ProductList extends Component {
 	constructor(props) {
 		super(props);
+	}
+
+	componentDidMount() {
+		this.props.actions.getProducts()
+	}
+
+	addToCart = (product) => {
+		this.props.actions.addToCart({ product, quantity: 1 })
+		alertify.success(product.productName + " sepete eklendi.")
 	}
 
 	render() {
@@ -13,6 +27,29 @@ class ProductList extends React.Component {
 					<Badge color='warning'>Products</Badge>
 					<Badge color='success'>{this.props.currentCategory.categoryName}</Badge>
 				</h3>
+				<Table>
+					<thead>
+						<tr>
+							<th> #</th>
+							<th> Product Name </th>
+							<th> Unit Price </th>
+							<th> Quantity Per Unit </th>
+							<th>Units In Stock</th>
+						</tr>
+					</thead>
+					<tbody>
+						{this.props.products.map(product => (
+							<tr key={product.id}>
+								<th scope="row"> {product.id} </th>
+								<td> {product.productName} </td>
+								<td> {product.unitPrice} </td>
+								<td> {product.quantityPerUnit} 	</td>
+								<td> {product.unitsInStock} </td>
+								<td><Button color="success" onClick={() => this.addToCart(product)}>  ekle</Button> </td>
+							</tr>
+						))}
+					</tbody>
+				</Table>
 			</div>
 		);
 	}
@@ -21,7 +58,17 @@ class ProductList extends React.Component {
 function mapStateToProps(state) {
 	return {
 		currentCategory: state.changeCategoryReducer,
+		products: state.productListReducer,
 	}
 }
 
-export default connect(mapStateToProps)(ProductList)
+function mapDispatchToProps(dispatch) {
+	return {
+		actions: {
+			getProducts: bindActionCreators(productActions.getProducts, dispatch),
+			addToCart: bindActionCreators(cartActions.addToCart, dispatch),
+		}
+	}
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProductList)

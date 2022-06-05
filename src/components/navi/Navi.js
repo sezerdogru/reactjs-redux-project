@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {
-	Navbar, NavbarBrand, DropdownMenu, DropdownItem, Nav, NavLink, NavbarToggler,
-	Collapse, NavItem, DropdownToggle, UncontrolledDropdown,NavbarText,
+	Navbar, NavbarBrand, Nav, NavLink, NavbarToggler,
+	Collapse, NavItem, NavbarText,
 } from 'reactstrap';
+import CartSummary from '../cart/CartSummary';
 
-export default class Navi extends React.Component {
+export default class Navi extends Component {
 	constructor(props) {
 		super(props);
 	}
@@ -35,33 +36,8 @@ export default class Navi extends React.Component {
 									GitHub
 								</NavLink>
 							</NavItem>
-							<UncontrolledDropdown
-								inNavbar
-								nav
-							>
-								<DropdownToggle
-									caret
-									nav
-								>
-									Options
-								</DropdownToggle>
-								<DropdownMenu right>
-									<DropdownItem>
-										Option 1
-									</DropdownItem>
-									<DropdownItem>
-										Option 2
-									</DropdownItem>
-									<DropdownItem divider />
-									<DropdownItem>
-										Reset
-									</DropdownItem>
-								</DropdownMenu>
-							</UncontrolledDropdown>
+							<CartSummary />
 						</Nav>
-						<NavbarText>
-							Simple Text
-						</NavbarText>
 					</Collapse>
 				</Navbar>
 			</div>
